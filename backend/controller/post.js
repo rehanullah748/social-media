@@ -14,11 +14,23 @@ module.exports.createPost = async (req, res) => {
   }
 };
 
-module.exports.getPost = async (req, res) => {
+module.exports.getPosts = async (req, res) => {
   try {
     const getPosts = await postModel
       .find({ user: req.user._id })
-      .populate("user", "-password");
+      .populate("user", "-password")
+      .populate("comments");
+    return res.status(200).json({ getPosts });
+  } catch (error) {
+    return res.status(200).json({ error: error.message });
+  }
+};
+module.exports.getAllPosts = async (req, res) => {
+  try {
+    const getPosts = await postModel
+      .find({})
+      .populate("user", "-password")
+      .populate("comments");
     return res.status(200).json({ getPosts });
   } catch (error) {
     return res.status(200).json({ error: error.message });
@@ -69,8 +81,21 @@ module.exports.createComment = async (req, res) => {
     return res.status(400).json({ error: "post id is required" });
   }
   try {
-    await CommentModel.create({ ...req.body, user: req.user._id });
-    return res.status(200).json({ msg: "Comment published" });
+    const findPost = await postModel.findOne({ _id: post });
+    // {_id: 'sdfsdf', title: 'some comemnt', body: 'body ' createdAt: 'sdfsd', updatedAt: 'sdfsd', comments: []}
+    if (findPost) {
+      const createdComment = await CommentModel.create({
+        ...req.body,
+        user: req.user._id,
+      });
+      // push comment id into comments array
+      findPost.comments.push(createdComment._id);
+      // save in the database
+      await findPost.save();
+      return res.status(200).json({ msg: "Comment published" });
+    } else {
+      return res.status(404).json({ error: "post not found" });
+    }
   } catch (error) {
     return res.status(500).json({ error: "Server internal error" });
   }

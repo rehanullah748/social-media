@@ -2,7 +2,8 @@ const express = require("express");
 const { tokenMiddleWare } = require("../middleWare/tokenMiddleWare");
 const {
   createPost,
-  getPost,
+  getPosts,
+  getAllPosts,
   deletePost,
   updatePost,
   createComment,
@@ -10,7 +11,8 @@ const {
 const { postValidation } = require("../validations/userValidation");
 const router = express.Router();
 router.post("/create-post", [postValidation, tokenMiddleWare], createPost);
-router.get("/get-posts", tokenMiddleWare, getPost);
+router.get("/get-posts", tokenMiddleWare, getPosts);
+router.get("/get-all-posts", getAllPosts);
 router.get("/delete-post/:id", tokenMiddleWare, deletePost);
 router.post("/update-post/:id", tokenMiddleWare, updatePost);
 router.post("/create-comment", tokenMiddleWare, createComment);
