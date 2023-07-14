@@ -100,3 +100,50 @@ module.exports.createComment = async (req, res) => {
     return res.status(500).json({ error: "Server internal error" });
   }
 };
+module.exports.deleteComment = async (req, res) => {
+  const { commentId, postId } = req.params;
+  if (!commentId || commentId === undefined || commentId.trim() === "") {
+    return res.status(400).json({ error: "comment id is required" });
+  }
+  if (!postId || postId === undefined || postId.trim() === "") {
+    return res.status(400).json({ error: "post id is required" });
+  }
+  try {
+    await CommentModel.findOneAndDelete({ _id: commentId });
+    const post = await postModel.findOne({ _id: postId });
+    if (post) {
+      const filtered = post.comments.filter(
+        (comment) => comment._id !== commentId
+      );
+      post.comments = filtered;
+      await post.save();
+      return res.status(200).json({ msg: "comment has been deleted" });
+    } else {
+      return res.status(404).json({ error: "post not found" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Server internal error" });
+  }
+};
+module.exports.updateComment = async (req, res) => {
+  const { commentId, body } = req.body;
+  if (!commentId || commentId === undefined || commentId.trim() === "") {
+    return res.status(400).json({ error: "comment id is required" });
+  }
+  if (!body || body === undefined || body.trim() === "") {
+    return res.status(400).json({ error: "body is required" });
+  }
+  try {
+    await CommentModel.findOneAndUpdate(
+      { _id: commentId },
+      {
+        $set: {
+          body,
+        },
+      }
+    );
+    return res.status(201).json({ msg: "comment has been updated" });
+  } catch (error) {
+    return res.status(500).json({ error: "Server internal error" });
+  }
+};
