@@ -5,7 +5,7 @@ const Left = () => {
       <span className="absolute top-[65px] left-[90px] text-white text-[30px] font-bold leading-normal">
         mygram
       </span>
-      <div className="w-[500px] h-[500px] relative">
+      <div className="w-full md:w-[500px] h-[500px] relative">
         <Image
           src="/header.png"
           alt="header image"
