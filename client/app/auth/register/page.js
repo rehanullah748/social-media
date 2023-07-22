@@ -1,6 +1,28 @@
+"use client";
 import Left from "@/components/Left";
+import { useState } from "react";
+import axios from "axios";
 
 const page = () => {
+  const [state, setState] = useState({
+    name: "",
+    userName: "",
+    password: "",
+  });
+  const onChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
+  const register = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:5000/api/register", {
+        ...state,
+      });
+      console.log("response => ", response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="grid grid-col-1 md:grid-cols-2 h-screen">
       <Left />
@@ -14,17 +36,19 @@ const page = () => {
             If you are already a member you can login with your email address
             and password.
           </p>
-          <form className="mt-10 w-full">
+          <form className="mt-10 w-full" onSubmit={register}>
             <div className="w-full">
               <label
                 htmlFor="name"
-                className="text-[#696F79] text-base font-medium leading-normal capitalize mb-[14px] block"
+                className="text-[#696F79] text-base font-medium leading-normal capitalize mb-2 block"
               >
                 name
               </label>
               <input
                 type="text"
-                name=""
+                name="name"
+                value={state.name}
+                onChange={onChange}
                 id="name"
                 className="w-full h-[64px] px-3 rounded-[6px] border border-[#8692A6] outline-none"
               />
@@ -32,27 +56,31 @@ const page = () => {
             <div className="w-full mt-4">
               <label
                 htmlFor="email"
-                className="text-[#696F79] text-base font-medium leading-normal capitalize mb-[14px] block"
+                className="text-[#696F79] text-base font-medium leading-normal capitalize mb-2 block"
               >
-                email
+                username
               </label>
               <input
                 type="text"
-                name=""
-                id="email"
+                name="userName"
+                value={state.userName}
+                onChange={onChange}
+                id="username"
                 className="w-full h-[64px] px-3 rounded-[6px] border border-[#8692A6] outline-none"
               />
             </div>
             <div className="w-full mt-4">
               <label
                 htmlFor="password"
-                className="text-[#696F79] text-base font-medium leading-normal capitalize mb-[14px] block"
+                className="text-[#696F79] text-base font-medium leading-normal capitalize mb-2 block"
               >
                 create password
               </label>
               <input
                 type="password"
-                name=""
+                name="password"
+                value={state.password}
+                onChange={onChange}
                 id="password"
                 className="w-full h-[64px] px-3 rounded-[6px] border border-[#8692A6] outline-none"
               />
