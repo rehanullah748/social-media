@@ -18,7 +18,7 @@ const page = () => {
       const response = await axios.post("http://localhost:5000/api/register", {
         ...state,
       });
-      console.log("response => ", response);
+     // console.log("response => ", response);
     } catch (error) {
       console.log(error);
     }
