@@ -14,9 +14,12 @@ module.exports.register = async (req, res) => {
     const usernameTest = usernameExp.test(userName);
     if (!usernameTest) {
       return res.status(400).json({
-        msg: `${userName} is invalid username letters, numbers, underscores and dashes are allowed only`,
-
-        param: "userName",
+        errors: [
+          {
+            msg: `${userName} is invalid username letters, numbers, underscores and dashes are allowed only`,
+            path: "userName",
+          },
+        ],
       });
     }
     const passwordExp =
@@ -25,7 +28,7 @@ module.exports.register = async (req, res) => {
     if (!passwordTest) {
       return res.status(400).json({
         msg: `Password should be 8 characters long, it will include at least one number, one alphabetic character, one lowercase, one uppercase and one special character.`,
-        param: "password",
+        path: "password",
       });
     }
     const salt = await bcrypt.genSalt(10);
