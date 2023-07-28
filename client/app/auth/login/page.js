@@ -1,9 +1,15 @@
-"use client";
-import React, { useState } from "react";
-
-const login = () => {
-  const [state, setState] = useState("");
-  return <div>login</div>;
+import Left from "@/components/Left";
+import LoginForm from "@/components/LoginForm";
+export const metadata = {
+  title: "Mygram - Login",
+};
+const page = () => {
+  return (
+    <div className="grid grid-col-1 md:grid-cols-2 h-screen">
+      <Left />
+      <LoginForm />
+    </div>
+  );
 };
 
-export default login;
+export default page;

@@ -8,11 +8,12 @@ const { tokenMiddleWare } = require("../middleWare/tokenMiddleWare");
 const {
   passwordValidation,
   registerValidation,
+  loginValidation,
 } = require("../validations/userValidation");
 const { updateProfile } = require("../controller/profile");
 const router = express.Router();
 router.post("/register", registerValidation, register);
-router.post("/login", login);
+router.post("/login", loginValidation, login);
 router.put(
   "/update-password",
   [tokenMiddleWare, passwordValidation],
