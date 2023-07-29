@@ -55,6 +55,7 @@ module.exports.register = async (req, res) => {
 };
 module.exports.login = async (req, res) => {
   const errors = validationResult(req);
+
   if (errors.isEmpty()) {
     const { userName, password } = req.body;
     const user = await userModel.findOne({ userName });
@@ -66,15 +67,19 @@ module.exports.login = async (req, res) => {
         });
         return res
           .status(200)
-          .json({ logdIn: "logdIn successfully", token, userid: user._id });
+          .json({ msg: "logdIn successfully", token, userid: user._id });
       } else {
-        return res.status(400).json({ msg: "password not matched" });
+        return res.status(400).json({
+          errors: [{ msg: "password not matched", path: "password" }],
+        });
       }
     } else {
-      return res.status(400).json({ msg: "please sign up first" });
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "user not found", path: "userName" }] });
     }
   }
-  return res.status(400).json({ error: errors.array });
+  return res.status(400).json({ errors: errors.array() });
 };
 
 module.exports.changePassword = async (req, res) => {

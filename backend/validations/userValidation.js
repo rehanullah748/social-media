@@ -7,6 +7,10 @@ module.exports.registerValidation = [
     .isLength({ min: 5, max: 50 })
     .withMessage("password should be 5 character long"),
 ];
+module.exports.loginValidation = [
+  body("userName").not().isEmpty().trim().withMessage("username is required"),
+  body("password").not().isEmpty().withMessage("password is required"),
+];
 module.exports.postValidation = [
   body("body").not().isEmpty().trim().withMessage("body is required"),
   body("postImage").not().isEmpty().trim().withMessage("postImage is required"),

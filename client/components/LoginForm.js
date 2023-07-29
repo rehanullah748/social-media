@@ -3,33 +3,25 @@ import { useState } from "react";
 import axios from "axios";
 import { errorsConversion } from "@/utils/errorsHelper";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import Loader from "./Loader";
 
-const RegisterForm = () => {
-  const { push } = useRouter();
+const LoginForm = () => {
   const [state, setState] = useState({
-    name: "",
     userName: "",
     password: "",
   });
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const onChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
-  const register = async (e) => {
+  const login = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/api/register", {
+      const response = await axios.post("http://localhost:5000/api/login", {
         ...state,
       });
-      setLoading(false);
-      push("/auth/login");
+      localStorage.setItem("socialToken", response?.data?.token);
     } catch (error) {
-      setLoading(false);
-
+      console.log(error?.response);
       const response = errorsConversion(error?.response?.data?.errors);
       setErrors(response);
     }
@@ -38,35 +30,12 @@ const RegisterForm = () => {
     <div className="flex items-center justify-center h-screen">
       <div className="px-6 sm:px-8 md:px-12 lg:px-20 xl:px-[173px]">
         <h2 className="text-black text-[30px] font-bold leading-normal capitalize">
-          Account signup
+          Account signin
         </h2>
         <p className="text-[#8692A6] mt-[10px] text-lg leading-[28px]">
-          {" "}
-          If you are already a member you can login with your email address and
-          password.
+          If you don't have an account then create a new account
         </p>
-        <form className="mt-10 w-full" onSubmit={register}>
-          <div className="w-full">
-            <label
-              htmlFor="name"
-              className="text-[#696F79] text-base font-medium leading-normal capitalize mb-2 block"
-            >
-              name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={state.name}
-              onChange={onChange}
-              id="name"
-              className={`w-full h-[64px] px-3 rounded-[6px] border ${
-                errors.name ? "border-rose-600" : "border-[#8692A6]"
-              } outline-none`}
-            />
-            {errors.name && (
-              <span className="text-rose-600">{errors.name}</span>
-            )}
-          </div>
+        <form className="mt-10 w-full" onSubmit={login}>
           <div className="w-full mt-4">
             <label
               htmlFor="email"
@@ -93,7 +62,7 @@ const RegisterForm = () => {
               htmlFor="password"
               className="text-[#696F79] text-base font-medium leading-normal capitalize mb-2 block"
             >
-              create password
+              enter password
             </label>
             <input
               type="password"
@@ -109,19 +78,14 @@ const RegisterForm = () => {
               <span className="text-rose-600">{errors.password}</span>
             )}
           </div>
-          {loading ? (
-            <Loader />
-          ) : (
-            <button className="mt-[40px] w-full h-[64px] rounded-[6px] bg-[#2C73EB] text-white text-center text-base font-medium leading-normal capitalize">
-              register account
-            </button>
-          )}
-
+          <button className="mt-[40px] w-full h-[64px] rounded-[6px] bg-[#2C73EB] text-white text-center text-base font-medium leading-normal capitalize">
+            login
+          </button>
           <Link
-            href={"/auth/login"}
+            href={"/auth/register"}
             className="block mt-3 text-base font-medium text-black"
           >
-            Already have an account?
+            Don't have an account?
           </Link>
         </form>
       </div>
@@ -129,4 +93,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;
