@@ -5,6 +5,7 @@ export const metadata = {
   description: "Hello register form",
 };
 const page = () => {
+
   return (
     <div className="grid grid-col-1 md:grid-cols-2 h-screen">
       <Left />
