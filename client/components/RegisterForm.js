@@ -1,12 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { errorsConversion } from "@/utils/errorsHelper";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Loader from "./Loader";
+import { useAuth } from "@/context/authContext";
 
 const RegisterForm = () => {
+  const { globalState } = useAuth();
   const { push } = useRouter();
   const [state, setState] = useState({
     name: "",
@@ -34,6 +36,11 @@ const RegisterForm = () => {
       setErrors(response);
     }
   };
+  useEffect(() => {
+    if (globalState.token) {
+      push("/");
+    }
+  }, [globalState]);
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="px-6 sm:px-8 md:px-12 lg:px-20 xl:px-[173px]">

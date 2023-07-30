@@ -121,3 +121,15 @@ module.exports.changePassword = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 };
+module.exports.checkToken = async (req, res) => {
+  const { token } = req.query;
+  if (!token || token === undefined || token === "") {
+    return res.status(400).json({ error: "token is required" });
+  }
+  try {
+    jwt.verify(token, process.env.SECRET_KEY);
+    return res.status(200).json({ msg: "success", token: true });
+  } catch (error) {
+    return res.status(401).json({ error: error.message });
+  }
+};

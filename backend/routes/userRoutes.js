@@ -3,6 +3,7 @@ const {
   register,
   login,
   changePassword,
+  checkToken,
 } = require("../controller/authController");
 const { tokenMiddleWare } = require("../middleWare/tokenMiddleWare");
 const {
@@ -19,5 +20,6 @@ router.put(
   [tokenMiddleWare, passwordValidation],
   changePassword
 );
+router.get("/check-token", checkToken);
 router.put("/update-profile", tokenMiddleWare, updateProfile);
 module.exports = router;

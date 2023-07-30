@@ -1,32 +1,51 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { errorsConversion } from "@/utils/errorsHelper";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Loader from "./Loader";
+import { useAuth } from "@/context/authContext";
 
 const LoginForm = () => {
+  const { globalState } = useAuth();
+  const { push } = useRouter();
   const [state, setState] = useState({
     userName: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const onChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
   const login = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post("http://localhost:5000/api/login", {
         ...state,
       });
       localStorage.setItem("socialToken", response?.data?.token);
+      setLoading(false);
+      push("/");
     } catch (error) {
+      setLoading(false);
       console.log(error?.response);
       const response = errorsConversion(error?.response?.data?.errors);
       setErrors(response);
     }
   };
-  return (
+  useEffect(() => {
+    if (globalState.token) {
+      push("/");
+    }
+  }, [globalState]);
+  return globalState.loader ? (
+    <div>
+      <Loader />
+    </div>
+  ) : (
     <div className="flex items-center justify-center h-screen">
       <div className="px-6 sm:px-8 md:px-12 lg:px-20 xl:px-[173px]">
         <h2 className="text-black text-[30px] font-bold leading-normal capitalize">
@@ -78,9 +97,13 @@ const LoginForm = () => {
               <span className="text-rose-600">{errors.password}</span>
             )}
           </div>
-          <button className="mt-[40px] w-full h-[64px] rounded-[6px] bg-[#2C73EB] text-white text-center text-base font-medium leading-normal capitalize">
-            login
-          </button>
+          {loading ? (
+            <Loader />
+          ) : (
+            <button className="mt-[40px] w-full h-[64px] rounded-[6px] bg-[#2C73EB] text-white text-center text-base font-medium leading-normal capitalize">
+              login
+            </button>
+          )}
           <Link
             href={"/auth/register"}
             className="block mt-3 text-base font-medium text-black"
