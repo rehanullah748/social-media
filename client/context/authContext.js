@@ -5,8 +5,8 @@ const authContext = createContext();
 const token = localStorage.getItem("socialToken");
 const AuthContextProvider = ({ children }) => {
   const [globalState, setGlobalState] = useState({
-    loader: true,
-    token: false,
+    loader: token ? true : false, // Set loader to true if there is no initialToken
+    token: !!token,
   });
   const checkToken = async () => {
     try {
@@ -15,12 +15,14 @@ const AuthContextProvider = ({ children }) => {
       );
       setGlobalState({ loader: false, ...data });
     } catch (error) {
-      setGlobalState({ ...state, loader: false, token: false });
+      setGlobalState({ ...globalState, loader: false, token: false });
       console.log(error);
     }
   };
   useEffect(() => {
-    checkToken();
+    if (token) {
+      checkToken();
+    }
   }, []);
   return (
     <authContext.Provider value={{ globalState }}>

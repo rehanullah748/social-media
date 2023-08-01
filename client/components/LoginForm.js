@@ -41,6 +41,7 @@ const LoginForm = () => {
       push("/");
     }
   }, [globalState]);
+  console.log(globalState.loader);
   return globalState.loader ? (
     <div>
       <Loader />
