@@ -109,11 +109,11 @@ const Nav = () => {
       </div>
       {/* mobile links */}
       {menu ? (
-        <ul className="flex md:hidden flex-col absolute top-full left-0 w-full">
+        <ul className="flex md:hidden flex-col absolute top-full left-0 w-full bg-blue-50">
           <li>
             <Link
               href="/"
-              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-gray-100 block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
+              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-white block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
             >
               home
             </Link>
@@ -121,7 +121,7 @@ const Nav = () => {
           <li>
             <Link
               href="/"
-              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-gray-100 block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
+              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-white block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
             >
               notification
             </Link>
@@ -129,7 +129,7 @@ const Nav = () => {
           <li>
             <Link
               href="/"
-              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-gray-100 block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
+              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-white block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
             >
               watch
             </Link>
@@ -137,7 +137,7 @@ const Nav = () => {
           <li>
             <Link
               href="/"
-              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-gray-100 block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
+              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-white block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
             >
               marketplace
             </Link>
@@ -145,7 +145,7 @@ const Nav = () => {
           <li>
             <Link
               href="/"
-              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-gray-100 block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
+              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-white block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
             >
               groups
             </Link>
@@ -153,7 +153,7 @@ const Nav = () => {
           <li>
             <Link
               href="/"
-              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-gray-100 block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
+              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-white block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
             >
               messenger
             </Link>
@@ -161,7 +161,7 @@ const Nav = () => {
           <li>
             <Link
               href="/"
-              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-gray-100 block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
+              className="text-[13px] font-medium capitalize text-[#788292] hover:bg-white block w-full p-3 transition-all duration-300 hover:font-semibold hover:pl-5"
             >
               live
             </Link>
