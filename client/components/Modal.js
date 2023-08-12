@@ -2,12 +2,34 @@
 import { GrClose } from "react-icons/gr";
 import { FileUploader } from "react-drag-drop-files";
 import { useState } from "react";
+import { InfinitySpin } from "react-loader-spinner";
+import axios from "axios";
+import Image from "next/image";
 const Modal = ({ close }) => {
   const [file, setFile] = useState(null);
-  const handleChange = (file) => {
-    console.log(file);
-    setFile(file);
+  const [state, setState] = useState({
+    image: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const handleChange = async (img) => {
+    const file = new FormData();
+    file.append("file", img);
+    file.append("upload_preset", "fxperlab");
+    file.append("cloud_name", "dj80llh31");
+    setLoading(true);
+    try {
+      const { data } = await axios.post(
+        "https://api.cloudinary.com/v1_1/dj80llh31/image/upload",
+        file
+      );
+      setLoading(false);
+      setState({ ...state, image: data.secure_url });
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
+  console.log(state);
   return (
     <div className="fixed inset-0 bg-black/25 flex items-center justify-center h-full ">
       <div className="p-3 flex justify-center w-full">
@@ -17,11 +39,24 @@ const Modal = ({ close }) => {
             onClick={close}
           />
           <form className="w-full mt-4">
-            <FileUploader
-              handleChange={handleChange}
-              name="file"
-              types={["jpg", "jpeg", "png"]}
-            />
+            {loading ? (
+              <InfinitySpin width="120" color="blue" />
+            ) : state.image !== "" ? (
+              <div className="w-full h-[150px] relative">
+                <Image
+                  src={state.image}
+                  fill
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <FileUploader
+                handleChange={handleChange}
+                name="file"
+                types={["jpg", "jpeg", "png"]}
+              />
+            )}
+
             <div className="w-full mt-3">
               <textarea
                 name=""
