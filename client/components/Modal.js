@@ -25,7 +25,7 @@ const Modal = ({ close }) => {
       setLoading(false);
       setState({ ...state, image: data.secure_url });
     } catch (error) {
-      setLoading(false);
+      
       console.log(error);
     }
   };
