@@ -14,7 +14,6 @@ module.exports.loginValidation = [
 module.exports.postValidation = [
   body("body").not().isEmpty().trim().withMessage("body is required"),
   body("postImage").not().isEmpty().trim().withMessage("postImage is required"),
-  body("user").isLength({ min: 5, max: 50 }).withMessage("user is required"),
 ];
 module.exports.passwordValidation = [
   body("currentPassword")

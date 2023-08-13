@@ -4,13 +4,17 @@ const CommentModel = require("../models/comment");
 module.exports.createPost = async (req, res) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
-    const { body, postImage, user } = req.body;
-    const createdPost = await postModel.create({ body, postImage, user });
+    const { body, postImage } = req.body;
+    const createdPost = await postModel.create({
+      body,
+      postImage,
+      user: req.user._id,
+    });
     return res
       .status(200)
       .json({ post: createdPost, msg: "post has been created" });
   } else {
-    return res.status(400).json({ error: errors.array() });
+    return res.status(400).json({ errors: errors.array() });
   }
 };
 

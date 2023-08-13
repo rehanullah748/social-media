@@ -2,15 +2,22 @@
 import { GrClose } from "react-icons/gr";
 import { FileUploader } from "react-drag-drop-files";
 import { useState } from "react";
-import { InfinitySpin } from "react-loader-spinner";
+import { TailSpin } from "react-loader-spinner";
 import axios from "axios";
 import Image from "next/image";
+import { useAuth } from "@/context/authContext";
 const Modal = ({ close }) => {
+  const {
+    globalState: { token },
+  } = useAuth();
+  console.log(token);
   const [file, setFile] = useState(null);
   const [state, setState] = useState({
     image: "",
+    body: "",
   });
   const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
   const handleChange = async (img) => {
     const file = new FormData();
     file.append("file", img);
@@ -30,6 +37,29 @@ const Modal = ({ close }) => {
     }
   };
   console.log(state);
+  const createPost = async (e) => {
+    e.preventDefault();
+    setFormLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/create-post",
+        {
+          body: state.body,
+          postImage: state.image,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setFormLoading(false);
+      console.log(response);
+    } catch (error) {
+      setFormLoading(false);
+      console.log(error);
+    }
+  };
   return (
     <div className="fixed inset-0 bg-black/25 flex items-center justify-center h-full ">
       <div className="p-3 flex justify-center w-full">
@@ -38,9 +68,18 @@ const Modal = ({ close }) => {
             className="absolute top-4 right-4 cursor-pointer text-gray-500"
             onClick={close}
           />
-          <form className="w-full mt-4">
+          <form className="w-full mt-4" onSubmit={createPost}>
             {loading ? (
-              <InfinitySpin width="120" color="blue" />
+              <TailSpin
+                height="50"
+                width="50"
+                color="blue"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
             ) : state.image !== "" ? (
               <div className="w-full h-[150px] relative">
                 <Image
@@ -60,6 +99,8 @@ const Modal = ({ close }) => {
             <div className="w-full mt-3">
               <textarea
                 name=""
+                value={state.body}
+                onChange={(e) => setState({ ...state, body: e.target.value })}
                 id=""
                 cols="30"
                 rows="6"
