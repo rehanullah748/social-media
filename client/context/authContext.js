@@ -1,13 +1,26 @@
 "use client";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 import { createContext, useContext, useEffect, useState } from "react";
 const authContext = createContext();
 const token = localStorage.getItem("socialToken");
-console.log(token);
+const verifyToken = () => {
+  if (token) {
+    const decode = jwtDecode(token);
+    const expiresIn = new Date(decode.exp * 1000);
+    if (new Date() > expiresIn) {
+      return null;
+    } else {
+      return token;
+    }
+  } else {
+    return null;
+  }
+};
 const AuthContextProvider = ({ children }) => {
   const [globalState, setGlobalState] = useState({
-    loader: token ? true : false, // Set loader to true if there is no initialToken
-    token: token ? token : null,
+    loader: true, // Set loader to true if there is no initialToken
+    token: verifyToken(),
   });
   const checkToken = async () => {
     try {
@@ -22,12 +35,12 @@ const AuthContextProvider = ({ children }) => {
     }
   };
   useEffect(() => {
-    if (token) {
+    if (verifyToken()) {
       checkToken();
     }
   }, []);
   return (
-    <authContext.Provider value={{ globalState }}>
+    <authContext.Provider value={{ globalState, setGlobalState }}>
       {children}
     </authContext.Provider>
   );

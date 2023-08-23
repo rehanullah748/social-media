@@ -41,6 +41,10 @@ const RegisterForm = () => {
       push("/");
     }
   }, [globalState]);
+  console.log(globalState);
+  if (globalState.loader) {
+    return <h1>Loading..........</h1>;
+  }
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="px-6 sm:px-8 md:px-12 lg:px-20 xl:px-[173px]">
