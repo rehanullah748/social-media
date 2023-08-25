@@ -27,8 +27,12 @@ module.exports.register = async (req, res) => {
     const passwordTest = passwordExp.test(password);
     if (!passwordTest) {
       return res.status(400).json({
-        msg: `Password should be 8 characters long, it will include at least one number, one alphabetic character, one lowercase, one uppercase and one special character.`,
-        path: "password",
+        errors: [
+          {
+            msg: `Password should be 8 characters long, it will include at least one number, one alphabetic character, one lowercase, one uppercase and one special character.`,
+            path: "password",
+          },
+        ],
       });
     }
     const salt = await bcrypt.genSalt(10);
@@ -45,9 +49,11 @@ module.exports.register = async (req, res) => {
         });
         return res.status(200).json({ msg: "user created" });
       }
-      return res.status(401).json({ error: "user is already exist" });
+      return res.status(401).json({
+        errors: [{ error: "user is already exist", path: "userName" }],
+      });
     } catch (error) {
-      return res.status(400).json({ error: error.message });
+      return res.status(500).json({ errors: "Server internal error" });
     }
   } else {
     return res.status(400).json({ errors: errors.array() });
@@ -128,7 +134,7 @@ module.exports.checkToken = async (req, res) => {
   }
   try {
     jwt.verify(token, process.env.SECRET_KEY);
-    return res.status(200).json({ msg: "success", token: true });
+    return res.status(200).json({ msg: "success", token });
   } catch (error) {
     return res.status(401).json({ error: error.message });
   }

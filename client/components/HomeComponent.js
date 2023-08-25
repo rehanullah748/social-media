@@ -6,8 +6,6 @@ import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 
 const HomeComponent = () => {
-  const { globalState, setGlobalState } = useAuth();
-  const { push } = useRouter();
   const [state, setState] = useState(false);
   const open = () => {
     setState(true);
@@ -15,19 +13,6 @@ const HomeComponent = () => {
   const close = () => {
     setState(false);
   };
-  useEffect(() => {
-    if (!globalState.token) {
-      push("/auth/login");
-    }
-  }, [globalState]);
-  useEffect(() => {
-    console.log("loader false run");
-    setGlobalState({ ...globalState, loader: false });
-  }, []);
-  console.log(globalState);
-  if (globalState.loader) {
-    return <h1>Loading............</h1>;
-  }
   return (
     <>
       <div className="flex justify-center mt-[22px]">

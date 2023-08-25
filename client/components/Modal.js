@@ -6,6 +6,8 @@ import { TailSpin } from "react-loader-spinner";
 import axios from "axios";
 import Image from "next/image";
 import { useAuth } from "@/context/authContext";
+import Loader from "./Loader";
+import { toast } from "react-hot-toast";
 const Modal = ({ close }) => {
   const {
     globalState: { token },
@@ -32,7 +34,6 @@ const Modal = ({ close }) => {
       setLoading(false);
       setState({ ...state, image: data.secure_url });
     } catch (error) {
-      
       console.log(error);
     }
   };
@@ -41,7 +42,7 @@ const Modal = ({ close }) => {
     e.preventDefault();
     setFormLoading(true);
     try {
-      const response = await axios.post(
+      const { data } = await axios.post(
         "http://localhost:5000/api/create-post",
         {
           body: state.body,
@@ -54,7 +55,9 @@ const Modal = ({ close }) => {
         }
       );
       setFormLoading(false);
-      console.log(response);
+      alert(data.msg);
+      close();
+      console.log(data);
     } catch (error) {
       setFormLoading(false);
       console.log(error);
@@ -107,11 +110,15 @@ const Modal = ({ close }) => {
                 className="border w-full outline-none border-gray-500 rounded-md p-3"
               ></textarea>
             </div>
-            <input
-              type="submit"
-              value="create post"
-              className="mt-4 block w-full bg-blue-600 rounded-md py-3 px-3 text-white capitalize font-medium cursor-pointer"
-            />
+            {formLoading ? (
+              <Loader />
+            ) : (
+              <input
+                type="submit"
+                value="create post"
+                className="mt-4 block w-full bg-blue-600 rounded-md py-3 px-3 text-white capitalize font-medium cursor-pointer"
+              />
+            )}
           </form>
         </div>
       </div>
