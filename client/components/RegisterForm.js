@@ -31,9 +31,13 @@ const RegisterForm = () => {
       push("/auth/login");
     } catch (error) {
       setLoading(false);
-
-      const response = errorsConversion(error?.response?.data?.errors);
-      setErrors(response);
+      console.log(error);
+      if (error?.response?.status === 500) {
+        alert("Something went wrong");
+      } else {
+        const response = errorsConversion(error?.response?.data?.errors);
+        setErrors(response);
+      }
     }
   };
   useEffect(() => {

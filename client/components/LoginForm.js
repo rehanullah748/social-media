@@ -26,14 +26,19 @@ const LoginForm = () => {
       const response = await axios.post("http://localhost:5000/api/login", {
         ...state,
       });
+      console.log(response);
       localStorage.setItem("socialToken", response?.data?.token);
       setLoading(false);
-      push("/");
+      // push("/");
     } catch (error) {
       setLoading(false);
       console.log(error?.response);
-      const response = errorsConversion(error?.response?.data?.errors);
-      setErrors(response);
+      if (error?.respone?.status === 500) {
+        alert("Something went wrong");
+      } else {
+        const response = errorsConversion(error?.response?.data?.errors);
+        setErrors(response);
+      }
     }
   };
   useEffect(() => {
