@@ -133,8 +133,13 @@ module.exports.checkToken = async (req, res) => {
     return res.status(400).json({ error: "token is required" });
   }
   try {
-    jwt.verify(token, process.env.SECRET_KEY);
-    return res.status(200).json({ msg: "success", token });
+    const { _id } = jwt.verify(token, process.env.SECRET_KEY);
+    const user = await userModel.findOne({ _id: _id }).select("-password");
+    if (user) {
+      return res.status(200).json({ msg: "success", token, user });
+    } else {
+      return res.status(404).json({ error: "user not found" });
+    }
   } catch (error) {
     return res.status(401).json({ error: error.message });
   }

@@ -8,6 +8,16 @@ const AuthContextProvider = ({ children }) => {
     loader: false, // Set loader to true if there is no initialToken
     token: null,
   });
+  const verifyToken = async (token) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:5000/api/check-token?token=${token}`
+      );
+      return data;
+    } catch (error) {
+      return null;
+    }
+  };
   useEffect(() => {
     const token = localStorage.getItem("socialToken");
     if (token) {
@@ -16,7 +26,11 @@ const AuthContextProvider = ({ children }) => {
       if (new Date() > exp) {
         localStorage.removeItem("socialToken");
       } else {
-        console.log(decode);
+        const callTokenFunction = async () => {
+          const result = await verifyToken(token);
+          console.log(result);
+        };
+        callTokenFunction();
       }
     }
   }, []);
