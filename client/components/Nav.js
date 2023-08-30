@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/context/authContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -7,6 +8,8 @@ import { GrClose } from "react-icons/gr";
 
 const Nav = () => {
   const [menu, setMenu] = useState(false);
+  const { globalState } = useAuth();
+  console.log("nav: ", globalState);
   const toggle = () => {
     setMenu(!menu);
   };
@@ -87,14 +90,24 @@ const Nav = () => {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="w-10 h-10 relative">
-          <Image
-            src="/images/user.svg"
-            fill
-            alt="search"
-            className="w-full h-full object-cover"
-          />
-        </div>
+        {globalState.token ? (
+          globalState?.user?.image ? (
+            <div className="w-10 h-10 relative">
+              <Image
+                src={globalState?.user?.image}
+                fill
+                alt="search"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ) : (
+            <span className="flex items-center justify-center w-10 h-10 bg-blue-600 rounded-full text-white text-xl font-medium cursor-pointer">
+              {globalState?.user?.name[0]}
+            </span>
+          )
+        ) : (
+          ""
+        )}
         {menu ? (
           <GrClose
             className="block md:hidden cursor-pointer"

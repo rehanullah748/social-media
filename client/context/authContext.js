@@ -28,12 +28,14 @@ const AuthContextProvider = ({ children }) => {
       } else {
         const callTokenFunction = async () => {
           const result = await verifyToken(token);
+          setGlobalState({ ...globalState, loader: false, ...result });
           console.log(result);
         };
         callTokenFunction();
       }
     }
   }, []);
+  console.log(globalState);
   return (
     <authContext.Provider value={{ globalState, setGlobalState }}>
       {children}

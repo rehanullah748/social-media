@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import { useAuth } from "@/context/authContext";
-import { useRouter } from "next/navigation";
 
 const HomeComponent = () => {
   const [state, setState] = useState(false);
+  const { globalState } = useAuth();
   const open = () => {
     setState(true);
   };
@@ -21,7 +21,10 @@ const HomeComponent = () => {
           onClick={open}
         >
           <span className="text-[#788292] text-[15px]">
-            What’s on you mind, Paul?
+            What’s on you mind,{" "}
+            <span className="capitalize font-medium">
+              {globalState?.user?.name}
+            </span>
           </span>
         </div>
       </div>
